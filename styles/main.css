@@ -49,7 +49,7 @@
   flex-direction: column;
   align-items: center;
 }
-.serieList__card {
+.background {
   background-color: grey;
   padding: 20px;
   margin-bottom: 20px;
@@ -58,6 +58,19 @@
   justify-content: space-around;
 }
 
-.serieList__card--title {
+.cardTitle {
   color: #ffe81f;
+}
+
+.backgroundFavorite {
+  background-color: #ffe81f;
+  padding: 20px;
+  margin-bottom: 20px;
+  display: flex;
+  flex-direction: column-reverse;
+  justify-content: space-around;
+}
+
+.titleFavorite {
+  color: grey;
 }

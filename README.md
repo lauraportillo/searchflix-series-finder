@@ -2,7 +2,7 @@
 
 # Searchflix
 
-Hola! Soy Laura Portillo y este es mi ejercicio para reflejar los conocimientos adquiridos en el Módulo 2 del bootcamp de **Adalab**
+Hola! Soy Laura Portillo y este es mi ejercicio para reflejar los conocimientos adquiridos en el Módulo 2 del bootcamp de **Adalab**.
 
 Espero poder contarte más en algún momento.
 
