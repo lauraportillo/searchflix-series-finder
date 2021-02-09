@@ -43,13 +43,21 @@
   justify-content: space-between;
   font-family: Arial, Helvetica, sans-serif;
 }
-.card {
-  display: flex;
-  flex-direction: column-reverse;
-}
 
 .serieList {
   display: flex;
   flex-direction: column;
   align-items: center;
+}
+.serieList__card {
+  background-color: grey;
+  padding: 20px;
+  margin-bottom: 20px;
+  display: flex;
+  flex-direction: column-reverse;
+  justify-content: space-around;
+}
+
+.serieList__card--title {
+  color: #ffe81f;
 }

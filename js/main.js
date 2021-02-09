@@ -31,8 +31,11 @@ function paintShows() {
   for (let i = 0; i < shows.length; i++) {
     const name = shows[i].show.name;
     const image = shows[i].show.image;
-    html += `<li class="card">`;
+    const id = shows[i].show.id;
+    html += `<li class="serieList__card js-show" id="${id}">`;
+    html += `<h3 class="serieList__card--title">`;
     html += `${name}`;
+    html += `</h3>`;
     if (image === null) {
       html += `<img src="https://via.placeholder.com/210x295/ffffff/666666/?"
          class="card__img" alt="no image">`;
@@ -42,6 +45,23 @@ function paintShows() {
     html += `</li>`;
   }
   showsContainer.innerHTML = html;
+  handleAddCardListeners();
+}
+
+//funcion paint favorites parecida a paintshows que pinte el array de favoritos en favotite conteiners casi igual
+
+function handleAddCardListeners() {
+  const showListener = document.querySelectorAll('.js-show');
+  for (const show of showListener) {
+    show.addEventListener('click', handleClickShow);
+  }
+}
+
+function handleClickShow(ev) {
+  const selectedId = parseInt(ev.currentTarget.id); // id lo pasamos a numero
+  const selectedObjet = shows.find((object) => object.show.id === selectedId); // busca el objeto que tiene ese id
+  favorites.push(selectedObjet); // guarda el objeto en let favorites
+  console.log(selectedObjet);
 }
 
 // como el ejercicio de star wars
