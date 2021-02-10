@@ -23,7 +23,6 @@ function getDataFromApi() {
       console.log(data);
       shows = data;
       paintShows();
-      setInLocalStorage();
     });
   // paintFavorites();
 }
@@ -54,7 +53,12 @@ function paintShows() {
     const name = shows[i].show.name;
     const image = shows[i].show.image;
     const id = shows[i].show.id;
-    html += `<li class="background js-show js-card js-favoriteBg" id="${id}">`; //identifico cada li por su id
+    const favoriteIndex = favorites.findIndex((object) => object.show.id === id);
+    if (favoriteIndex === -1) {
+      html += `<li class="background js-show js-card js-favoriteBg" id="${id}">`;
+    } else {
+      html += `<li class="backgroundFavorite js-show js-card js-favoriteBg" id="${id}">`; //identifico cada li por su id
+    }
     html += `<h3 class="cardTitle">`;
     html += `${name}`;
     html += `</h3>`;
@@ -67,7 +71,7 @@ function paintShows() {
     html += `</li>`;
   }
   showsContainer.innerHTML = html;
-  handleAddShowListeners();
+  listenAddShow();
 }
 
 function paintFavorites() {
@@ -76,7 +80,10 @@ function paintFavorites() {
     const nameFav = favorites[i].show.name;
     const imageFav = favorites[i].show.image;
     const idFav = favorites[i].show.id;
-    htmlfav += `<li class="background" id="${idFav}">`; //identifico cada li por su id
+    htmlfav += `<li class="container" id="${idFav}">`; //identifico cada li por su id
+    htmlfav += `<div class= "card">`;
+    htmlfav += `<button class="btn js-delete" id="${idFav}"> x </button>`;
+    htmlfav += `<div class="background">`;
     htmlfav += `<h3 class="cardTitle">`;
     htmlfav += `${nameFav}`;
     htmlfav += `</h3>`;
@@ -86,13 +93,17 @@ function paintFavorites() {
     } else {
       htmlfav += `<img src="${imageFav.medium}" class="card__img" alt="Imagen de ${nameFav}">`;
     }
+    htmlfav += `</div>`;
+    htmlfav += `</div>`;
     htmlfav += `</li>`;
   }
   favoritesContainer.innerHTML = htmlfav;
-  handleAddShowListeners();
+  listenAddShow();
+  listenDeleteButtons(); //ejecutar la función
+  setInLocalStorage(); // después de haber hecho click
 }
 
-function handleAddShowListeners() {
+function listenAddShow() {
   const showListener = document.querySelectorAll('.js-show');
   for (const show of showListener) {
     show.addEventListener('click', handleClickShow);
@@ -105,21 +116,29 @@ function handleClickShow(ev) {
   favorites.push(selectedObject); // guarda el objeto en let favorites
   console.log(selectedObject);
   paintFavorites();
+  paintShows();
+  setInLocalStorage(); // después de haber hecho click
 }
 
-//CAMBIO DE COLOR DE LA TARJETA
+//BOTON DE RESET: borrar todo
 
-// function changeCardColorsListeners() {
-//   const cardColorsListener = document.querySelectorAll('.js-card');
-//   for (const cardColors of cardColorsListener) {
-//     cardColors.addEventListener('click', handleChangeCardColors);
-//   }
-// }
-// function handleChangeCardColors() {
-//   showCardColor.classList.remove('background');
-//   showCardColor.classList.add('backgroundFavorite');
-//   paintShows();
-// }
+function listenDeleteButtons() {
+  const deleteButtons = document.querySelectorAll('.js-delete');
+  for (const deleteButton of deleteButtons) {
+    deleteButton.addEventListener('click', handleDelete);
+  }
+}
+
+// sé que hay que decirle que busque show.id pero no sé muy bien cómo
+function handleDelete(ev) {
+  const clickedId = parseInt(ev.currentTarget.id); //estee es el problema click tiene un numero ver si me está llegando el id
+  const favoriteIndex = favorites.findIndex((object) => object.show.id === clickedId);
+  if (favoriteIndex !== -1) {
+    favorites.splice(favoriteIndex, 1);
+    paintFavorites();
+    paintShows();
+  }
+}
 
 // como el ejercicio de star wars
 function resetInfo() {
