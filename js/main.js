@@ -93,7 +93,7 @@ function paintFavorites() {
     htmlfav += `</div>`;
     htmlfav += `</li>`;
   }
-  htmlfav += `<button class="button js-deleteAll" type="reset">Delete all</button>`;
+  htmlfav += `<button class="button2 js-deleteAll" type="reset">Delete all</button>`;
   favoritesContainer.innerHTML = htmlfav;
   listenAddShow();
   listenDeleteButtons();
