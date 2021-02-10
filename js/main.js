@@ -11,7 +11,6 @@ const showCardColor = document.querySelector('.js-favoriteBg');
 // variables globales
 let shows = [];
 let favorites = [];
-console.log(favorites);
 
 // api
 function getDataFromApi() {
@@ -24,9 +23,7 @@ function getDataFromApi() {
       shows = data;
       paintShows();
     });
-  // paintFavorites();
 }
-// getDataFromApi();
 
 // local storage
 function setInLocalStorage() {
@@ -56,10 +53,11 @@ function paintShows() {
     const favoriteIndex = favorites.findIndex((object) => object.show.id === id);
     if (favoriteIndex === -1) {
       html += `<li class="background js-show js-card js-favoriteBg" id="${id}">`;
+      html += `<h3 class="cardTitle">`;
     } else {
       html += `<li class="backgroundFavorite js-show js-card js-favoriteBg" id="${id}">`; //identifico cada li por su id
+      html += `<h3 class="cardTitleFavorite">`;
     }
-    html += `<h3 class="cardTitle">`;
     html += `${name}`;
     html += `</h3>`;
     if (image === null) {
@@ -97,10 +95,12 @@ function paintFavorites() {
     htmlfav += `</div>`;
     htmlfav += `</li>`;
   }
+  htmlfav += `<button class="button js-deleteAll" type="reset">Delete all</button>`; //SOPORTE LAURA js-reset id="${idFav}" no puedo usar este id porque deja de funcionar lo demás
   favoritesContainer.innerHTML = htmlfav;
   listenAddShow();
   listenDeleteButtons(); //ejecutar la función
   setInLocalStorage(); // después de haber hecho click
+  listenDeleteAllButtons();
 }
 
 function listenAddShow() {
@@ -113,14 +113,18 @@ function listenAddShow() {
 function handleClickShow(ev) {
   const selectedId = parseInt(ev.currentTarget.id); // id lo pasamos a numero
   const selectedObject = shows.find((object) => object.show.id === selectedId); // busca el objeto que tiene ese id
-  favorites.push(selectedObject); // guarda el objeto en let favorites
-  console.log(selectedObject);
+  const noRepeatObjet = favorites.findIndex((object) => object.show.id === selectedId); // con un cambio aqui se hace solo el ultimo paso
+  if (noRepeatObjet === -1) {
+    favorites.push(selectedObject); // guarda el objeto en let favorites
+  } else {
+    favorites.splice(selectedObject, 1); // borra el objeto de favoritos
+  }
   paintFavorites();
   paintShows();
   setInLocalStorage(); // después de haber hecho click
 }
 
-//BOTON DE RESET: borrar todo
+// borrar cada botón
 
 function listenDeleteButtons() {
   const deleteButtons = document.querySelectorAll('.js-delete');
@@ -129,15 +133,27 @@ function listenDeleteButtons() {
   }
 }
 
-// sé que hay que decirle que busque show.id pero no sé muy bien cómo
 function handleDelete(ev) {
-  const clickedId = parseInt(ev.currentTarget.id); //estee es el problema click tiene un numero ver si me está llegando el id
+  const clickedId = parseInt(ev.currentTarget.id); //el id tiene que estar tb en el boton de cerrar
   const favoriteIndex = favorites.findIndex((object) => object.show.id === clickedId);
   if (favoriteIndex !== -1) {
     favorites.splice(favoriteIndex, 1);
     paintFavorites();
     paintShows();
   }
+}
+
+// delete all favorite shows SOPORTE LAURA
+
+function listenDeleteAllButtons() {
+  const deleteAllButtons = document.querySelector('.js-deleteAll'); // solo escucha un botón
+  deleteAllButtons.addEventListener('click', handleDeleteAll);
+}
+
+function handleDeleteAll() {
+  localStorage.removeItem('favorites'); //vaciar el array de favoritos
+  favorites = []; // array vacio
+  paintFavorites(); // repintar
 }
 
 // como el ejercicio de star wars

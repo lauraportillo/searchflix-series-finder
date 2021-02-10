@@ -92,6 +92,6 @@
   justify-content: center;
 }
 
-.titleFavorite {
-  color: grey;
+.cardTitleFavorite {
+  color: rgb(73, 73, 73);
 }
