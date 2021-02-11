@@ -47,6 +47,7 @@ function paintShows() {
   for (let i = 0; i < shows.length; i++) {
     const name = shows[i].show.name;
     const image = shows[i].show.image;
+    const schedule = shows[i].show.schedule;
     const id = shows[i].show.id;
     const favoriteIndex = favorites.findIndex((object) => object.show.id === id);
     if (favoriteIndex === -1) {
@@ -57,6 +58,9 @@ function paintShows() {
       html += `<h3 class="cardTitleFavorite">`;
     }
     html += `${name}`;
+    html += `</h3>`;
+    html += `<h3>`;
+    html += `Horario de ${name} ${schedule.time}h`;
     html += `</h3>`;
     if (image === null) {
       html += `<img src="https://via.placeholder.com/210x295/ffffff/666666/?"
@@ -94,11 +98,13 @@ function paintFavorites() {
     htmlfav += `</li>`;
   }
   htmlfav += `<button class="button js-deleteAll" type="reset">Delete all</button>`;
+  htmlfav += `<button class="button js-log" type="reset">Log</button>`;
   favoritesContainer.innerHTML = htmlfav;
   listenAddShow();
   listenDeleteButtons();
   setInLocalStorage();
   listenDeleteAllButtons();
+  listenLogBtn();
 }
 
 function listenAddShow() {
@@ -154,6 +160,19 @@ function handleDeleteAll() {
   favorites = [];
   paintFavorites();
   paintShows();
+}
+
+// boton log
+
+function listenLogBtn() {
+  const logButton = document.querySelector('.js-log');
+  logButton.addEventListener('click', handleLogBtn);
+}
+
+function handleLogBtn() {
+  for (const favorite of favorites) {
+    console.log(favorite.show.name);
+  }
 }
 
 // como el ejercicio de star wars
